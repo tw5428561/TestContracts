@@ -1,7 +1,7 @@
 const fs = require("fs");
 import "@nomiclabs/hardhat-web3";
 import { task } from "hardhat/config";
-import { TestToken__factory } from '../typechain-types'
+import { TestERC20__factory } from '../typechain-types'
 
 task("accounts", "Prints the list of accounts", async (taskArgs,hre) => {
 
@@ -27,7 +27,7 @@ task("qBalanceOfERC20", "Prints an account's balance")
   .setAction(async (taskArgs, hre) => {
 
     const accounts = await hre.ethers.getSigners();
-    const erc20 = await new TestToken__factory(accounts[0]).attach(taskArgs.token)
+    const erc20 = await new TestERC20__factory(accounts[0]).attach(taskArgs.token)
 
     const balance = await erc20.balanceOf(taskArgs.account)
     console.log("balance: ", balance.toString())
@@ -38,7 +38,7 @@ task("mint", "Prints an account's balance")
   .addParam("token", "The token's address")
   .setAction(async (taskArgs,hre) => {
     const accounts = await hre.ethers.getSigners();
-    const erc20 = await new TestToken__factory(accounts[0]).attach(taskArgs.token)
+    const erc20 = await new TestERC20__factory(accounts[0]).attach(taskArgs.token)
 
     const txn = await erc20.mint(taskArgs.account, "123456789000000000000000000")
 
