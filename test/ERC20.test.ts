@@ -93,7 +93,7 @@ describe("ERC20Token contract", () =>{
             const { erc20, owner, addr1, addr2} = await loadFixture(deployTokenFixture);
             const spender = addr2.address
             await erc20.approve(spender, ethers.BigNumber.from("1000000000000000000"))
-            const ownerAllowance = await erc20.allowance(owner.address, spender);
+            let ownerAllowance = await erc20.allowance(owner.address, spender);
             expect(ownerAllowance).to.equal(ethers.BigNumber.from("1000000000000000000"));
 
             await erc20.mint(owner.address, ethers.BigNumber.from("2000000000000000000"))
@@ -106,6 +106,9 @@ describe("ERC20Token contract", () =>{
 
             let addr1Balance = await erc20.balanceOf(addr1.address);
             expect(addr1Balance).to.equal(ethers.BigNumber.from("1000000000000000000"));
+
+            ownerAllowance = await erc20.allowance(owner.address, spender);
+            expect(ownerAllowance).to.equal(ethers.BigNumber.from(0));
         });
     
         it("Should decrease and increase allowance to spender", async () => {
