@@ -1,6 +1,7 @@
 const fs = require("fs");
 import "@nomiclabs/hardhat-web3";
 import { task } from "hardhat/config";
+// @ts-ignore
 import { TestERC20__factory } from '../typechain-types'
 
 task("accounts", "Prints the list of accounts", async (taskArgs,hre) => {

@@ -7,6 +7,7 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "./tasks/Token.task"
+import "./tasks/ERC20.task"
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const config: HardhatUserConfig = {
       gasPrice: 5000000000,
       chainId: 7001,
       gas: 4100000,
-      accounts:['8f14df1da1a318bec99800b72c5031e4fdc4ec017f00ab9659339ecb0193120e']
+      accounts:['7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e']
     },
   },
   gasReporter: {

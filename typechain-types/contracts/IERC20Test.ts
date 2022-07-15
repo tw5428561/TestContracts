@@ -20,6 +20,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../common";
 
 export interface IERC20TestInterface extends utils.Interface {
@@ -32,11 +33,11 @@ export interface IERC20TestInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "burnFrom",
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
 
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
@@ -73,40 +74,40 @@ export interface IERC20Test extends BaseContract {
 
   functions: {
     burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
   burnFrom(
-    account: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    account: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   mint(
-    to: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    to: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     burnFrom(
-      account: string,
-      amount: BigNumberish,
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -115,29 +116,29 @@ export interface IERC20Test extends BaseContract {
 
   estimateGas: {
     burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }
