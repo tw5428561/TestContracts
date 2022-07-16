@@ -1,8 +1,7 @@
 import "@nomiclabs/hardhat-web3"
 import {subtask, task} from "hardhat/config"
-import { keccak256 } from "ethers/lib/utils"
-import {token} from "../typechain-types/@openzeppelin/contracts";
 import {expect} from "chai";
+import fs from "fs";
 
 let map:Map<string,string>=new Map
 task("erc20Test", "erc20 任务测试入口task")
@@ -11,7 +10,7 @@ task("erc20Test", "erc20 任务测试入口task")
         map= await run("deployToken", {name: "erc20Test",symbol:"bit"})
         let tokenAddress=  map.get("tokenAddress")
         let ownerAddress=  map.get("ownerAddress")
-        map.get("tokenAddress")
+        let token=  map.get("token")
         // @ts-ignore
         await run("mintToken",{token:tokenAddress,amount:"111111111111111111111",to:ownerAddress})
         // @ts-ignore
@@ -24,6 +23,14 @@ task("erc20Test", "erc20 任务测试入口task")
         let allowances = await run("queryAllowance",{token:tokenAddress, to:ownerAddress,account:ownerAddress})
         expect(allowances).to.equal("211111111111111111111")
         console.log("--------------------------------approve-queryAllowance-success--------------------------------")
+        const secrects =read_csv('./secrect.csv')
+        let userAddress=secrects[1][1]
+        // @ts-ignore
+        await run("transfer", {token: tokenAddress,to: userAddress, amount: "11111111111111111111"})
+        // @ts-ignore
+        let balances01 =await run("queryErc20balances", {token: tokenAddress, user: userAddress})
+        expect(balances01).to.equal("11111111111111111111")
+        console.log("--------------------------------erc20-transfer-success--------------------------------")
     });
 
 subtask("deployToken", "Deploy Token")
@@ -82,4 +89,39 @@ subtask("queryAllowance", "Query ERC20 allowance")
         return allowances
     });
 
+subtask("transfer", "转账")
+    .addParam("token", "token address")
+    .addParam("to", "to address ")
+    .addParam("amount", "approve amount")
+    .setAction(async (taskArgs, hre) => {
+        const tokenFactory = await hre.ethers.getContractFactory('TestERC20')
+        const erc20 = await tokenFactory.attach(taskArgs.token)
+        let  txInfo=  await erc20.transfer(taskArgs.to, taskArgs.amount);
+        //console.log(txInfo.hash)
+    });
+
+subtask("getHash","获取交易信息")
+    .addParam("hash", "交易hash")
+    .setAction(async(taskArgs,hre)=>{
+        let transaction = await hre.web3.eth.getTransaction(taskArgs.hash)
+        let transactionReceipt = await hre.web3.eth.getTransactionReceipt(taskArgs.hash)
+        let block = await hre.web3.eth.getBlock(transaction.blockNumber!)
+        console.log("block timestamp: ", block.timestamp)
+        console.log("blockHash: ", transaction.blockHash)
+        console.log("blockNumber: ", transaction.blockNumber)
+        console.log("receiptStatus: ", transactionReceipt.status)
+        console.log("cumulativeGasUsed: ", transactionReceipt.cumulativeGasUsed)
+        console.log("contractAddress: ", transactionReceipt.contractAddress)
+    });
+
+function read_csv(csvfile: any){
+    // @ts-ignore
+    let csvstr: string = fs.readFileSync(csvfile,"utf8",'r+');
+    let arr: string[] = csvstr.split('\n');
+    let array: any = [];
+    arr.forEach(line => {
+        array.push(line.split(','));
+    });
+    return array
+}
 module.exports = {}
