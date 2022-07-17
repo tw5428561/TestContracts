@@ -53,17 +53,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC721__factory>;
     getContractFactory(
-      name: "ERC721Burnable",
+      name: "ERC721URIStorage",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC721Burnable__factory>;
-    getContractFactory(
-      name: "ERC721Enumerable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC721Enumerable__factory>;
-    getContractFactory(
-      name: "IERC721Enumerable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721Enumerable__factory>;
+    ): Promise<Contracts.ERC721URIStorage__factory>;
     getContractFactory(
       name: "IERC721Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -97,9 +89,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TestERC20__factory>;
     getContractFactory(
-      name: "MyToken",
+      name: "GameItem",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MyToken__factory>;
+    ): Promise<Contracts.GameItem__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -152,20 +144,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ERC721>;
     getContractAt(
-      name: "ERC721Burnable",
+      name: "ERC721URIStorage",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.ERC721Burnable>;
-    getContractAt(
-      name: "ERC721Enumerable",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ERC721Enumerable>;
-    getContractAt(
-      name: "IERC721Enumerable",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC721Enumerable>;
+    ): Promise<Contracts.ERC721URIStorage>;
     getContractAt(
       name: "IERC721Metadata",
       address: string,
@@ -207,10 +189,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.TestERC20>;
     getContractAt(
-      name: "MyToken",
+      name: "GameItem",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.MyToken>;
+    ): Promise<Contracts.GameItem>;
 
     // default types
     getContractFactory(
