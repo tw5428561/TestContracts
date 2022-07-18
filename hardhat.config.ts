@@ -8,7 +8,8 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "./tasks/Token.task"
 import "./tasks/ERC20.task"
-
+import "./tasks/deployAll.task"
+import "./tasks/ERC721.task"
 dotenv.config();
 
 const config: HardhatUserConfig = {

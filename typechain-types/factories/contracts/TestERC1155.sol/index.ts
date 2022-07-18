@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MyToken__factory } from "./MyToken__factory";
+export { TestERC1155__factory } from "./TestERC1155__factory";

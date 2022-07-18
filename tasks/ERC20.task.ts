@@ -10,7 +10,6 @@ task("erc20Test", "erc20 任务测试入口task")
         map= await run("deployToken", {name: "erc20Test",symbol:"bit"})
         let tokenAddress=  map.get("tokenAddress")
         let ownerAddress=  map.get("ownerAddress")
-        let token=  map.get("token")
         // @ts-ignore
         await run("mintToken",{token:tokenAddress,amount:"111111111111111111111",to:ownerAddress})
         // @ts-ignore

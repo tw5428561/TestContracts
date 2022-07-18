@@ -93,6 +93,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MyToken__factory>;
     getContractFactory(
+      name: "TestERC1155",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TestERC1155__factory>;
+    getContractFactory(
       name: "TestERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TestERC20__factory>;
@@ -100,6 +104,10 @@ declare module "hardhat/types/runtime" {
       name: "MyToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MyToken__factory>;
+    getContractFactory(
+      name: "TestERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TestERC721__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -202,6 +210,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.MyToken>;
     getContractAt(
+      name: "TestERC1155",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TestERC1155>;
+    getContractAt(
       name: "TestERC20",
       address: string,
       signer?: ethers.Signer
@@ -211,6 +224,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MyToken>;
+    getContractAt(
+      name: "TestERC721",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TestERC721>;
 
     // default types
     getContractFactory(

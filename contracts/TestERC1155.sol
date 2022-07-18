@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract MyToken is ERC1155, Ownable, Pausable {
+contract TestERC1155 is ERC1155, Ownable, Pausable {
     constructor() ERC1155("Test") {
         _mint(msg.sender, 0, 1000 * 10 ** 18, "");
         _mint(msg.sender, 1, 1, "");

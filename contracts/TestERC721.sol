@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MyToken is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
+contract TestERC721 is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     constructor() ERC721("MyToken", "MTK") {}
 
     function safeMint(address to, uint256 tokenId) public onlyOwner {
