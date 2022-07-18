@@ -24,12 +24,11 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../../common";
+} from "../../../../../common";
 
-export interface GameItemInterface extends utils.Interface {
+export interface ERC721EnumerableInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
-    "awardItem(address,string)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -40,14 +39,16 @@ export interface GameItemInterface extends utils.Interface {
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
+    "tokenByIndex(uint256)": FunctionFragment;
+    "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "approve"
-      | "awardItem"
       | "balanceOf"
       | "getApproved"
       | "isApprovedForAll"
@@ -58,17 +59,16 @@ export interface GameItemInterface extends utils.Interface {
       | "setApprovalForAll"
       | "supportsInterface"
       | "symbol"
+      | "tokenByIndex"
+      | "tokenOfOwnerByIndex"
       | "tokenURI"
+      | "totalSupply"
       | "transferFrom"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "awardItem",
-    values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
@@ -102,8 +102,20 @@ export interface GameItemInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "tokenByIndex",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenOfOwnerByIndex",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "tokenURI",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferFrom",
@@ -111,7 +123,6 @@ export interface GameItemInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "awardItem", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
@@ -140,7 +151,19 @@ export interface GameItemInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenOfOwnerByIndex",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -193,12 +216,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface GameItem extends BaseContract {
+export interface ERC721Enumerable extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: GameItemInterface;
+  interface: ERC721EnumerableInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -223,12 +246,6 @@ export interface GameItem extends BaseContract {
     approve(
       to: string,
       tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    awardItem(
-      player: string,
-      tokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -280,10 +297,23 @@ export interface GameItem extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferFrom(
       from: string,
@@ -296,12 +326,6 @@ export interface GameItem extends BaseContract {
   approve(
     to: string,
     tokenId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  awardItem(
-    player: string,
-    tokenURI: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -350,7 +374,20 @@ export interface GameItem extends BaseContract {
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
+  tokenByIndex(
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  tokenOfOwnerByIndex(
+    owner: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferFrom(
     from: string,
@@ -365,12 +402,6 @@ export interface GameItem extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    awardItem(
-      player: string,
-      tokenURI: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -417,7 +448,20 @@ export interface GameItem extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -469,12 +513,6 @@ export interface GameItem extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    awardItem(
-      player: string,
-      tokenURI: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
@@ -523,10 +561,23 @@ export interface GameItem extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -540,12 +591,6 @@ export interface GameItem extends BaseContract {
     approve(
       to: string,
       tokenId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    awardItem(
-      player: string,
-      tokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -600,10 +645,23 @@ export interface GameItem extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: string,
