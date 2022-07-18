@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { MyToken } from "./MyToken";
-export type { TestERC721 } from "./TestERC721";

@@ -3,7 +3,6 @@
 /* eslint-disable */
 import type * as testErc1155Sol from "./TestERC1155.sol";
 export type { testErc1155Sol };
-import type * as testErc721Sol from "./TestERC721.sol";
-export type { testErc721Sol };
 export type { IERC20Test } from "./IERC20Test";
 export type { TestERC20 } from "./TestERC20";
+export type { TestERC721 } from "./TestERC721";
