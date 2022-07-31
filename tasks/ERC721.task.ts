@@ -11,24 +11,22 @@ task("erc721Test", "erc721 任务测试入口task")
         let tokenAddress=  map.get("tokenAddress")
         let ownerAddress=  map.get("ownerAddress")
         // @ts-ignore
-        await run("mintToken721",{token:tokenAddress,amount:"111111111111111111111",to:ownerAddress})
+        await run("mintToken721",{token:tokenAddress,tokenId:"2",to:ownerAddress})
+        // @ts-ignore
+        await run("mintToken721",{token:tokenAddress,tokenId:"3",to:ownerAddress})
         // @ts-ignore
         let balances =await run("queryErc721balances", {token: tokenAddress, user: ownerAddress})
-        expect(balances).to.equal("111111111111111111111")
-        console.log("--------------------------------deployToken-mintToken-success--------------------------------")
-        // @ts-ignore
-        await run("approve721",{token:tokenAddress, to:ownerAddress,amount:"211111111111111111111"})
-        // @ts-ignore
-        let allowances = await run("queryAllowance721",{token:tokenAddress, to:ownerAddress,account:ownerAddress})
-        expect(allowances).to.equal("211111111111111111111")
-        console.log("--------------------------------approve-queryAllowance-success--------------------------------")
+        expect(balances).to.equal("2")
+        console.log("--------------------------------deploy721Token-mintToken-success--------------------------------")
         const secrects =read_csv('./secrect.csv')
         let userAddress=secrects[1][1]
         // @ts-ignore
-        await run("transfer721", {token: tokenAddress,to: userAddress, amount: "11111111111111111111"})
+        await run("transfer721", {from:ownerAddress,token: tokenAddress,to: userAddress, tokenId: "2"})
+        // @ts-ignore
+        await run("transfer721", {from:ownerAddress,token: tokenAddress,to: userAddress, tokenId: "3"})
         // @ts-ignore
         let balances01 =await run("queryErc721balances", {token: tokenAddress, user: userAddress})
-        expect(balances01).to.equal("11111111111111111111")
+        expect(balances01).to.equal("2")
         console.log("--------------------------------erc721-transfer-success--------------------------------")
     });
 
@@ -47,15 +45,15 @@ subtask("deployToken721", "Deploy Token")
 
 subtask("mintToken721", "Mint Token")
     .addParam("token", "token address")
-    .addParam("amount", "token mint amount")
+    .addParam("tokenId", "token mint amount")
     .addParam("to", "接受者钱包地址")
     .setAction(async (taskArgs, hre) => {
         const tokenFactory = await hre.ethers.getContractFactory('TestERC721')
         const token = await tokenFactory.attach(taskArgs.token)
-        await token.safeMint(taskArgs.to, taskArgs.amount)
+        await token.safeMint(taskArgs.to, taskArgs.tokenId)
     });
 
-subtask("queryErc721balances", "Query ERC721 balances")
+subtask("queryErc721balances", "Query ERC721 统计owner 地址所持有的NFTs数量")
     .addParam("token", "token address")
     .addParam("user", "user address ")
     .setAction(async (taskArgs, hre) => {
@@ -65,38 +63,16 @@ subtask("queryErc721balances", "Query ERC721 balances")
         return balances
     });
 
-subtask("approve721", "approve ERC20 token to others")
-    .addParam("token", "erc20 address")
-    .addParam("to", "to address ")
-    .addParam("amount", "approve amount")
-    .setAction(async (taskArgs, hre) => {
-        const tokenFactory = await hre.ethers.getContractFactory('TestERC721')
-        const token = await tokenFactory.attach(taskArgs.token)
-
-        await token.approve(taskArgs.to, taskArgs.amount)
-    });
-
-subtask("queryAllowance721", "Query ERC721 allowance")
-    .addParam("token", "erc721 address")
-    .addParam("to", "to address ")
-    .addParam("account", "account address")
-    .setAction(async (taskArgs, hre) => {
-        const tokenFactory = await hre.ethers.getContractFactory('TestERC721')
-        const token = await tokenFactory.attach(taskArgs.token)
-
-        let allowances = (await token.getApproved(taskArgs.account, taskArgs.to))
-        return allowances
-    });
-
 subtask("transfer721", "转账")
+    .addParam("from", "from address")
     .addParam("token", "token address")
     .addParam("to", "to address ")
-    .addParam("amount", "approve amount")
+    .addParam("tokenId", "approve tokenId")
     .setAction(async (taskArgs, hre) => {
         const tokenFactory = await hre.ethers.getContractFactory('TestERC721')
         const erc721 = await tokenFactory.attach(taskArgs.token)
-        let  txInfo=  await erc721.transferOwnership(taskArgs.to, taskArgs.amount);
-        //console.log(txInfo.hash)
+        let  txInfo=  await erc721["safeTransferFrom(address,address,uint256)"](taskArgs.from,taskArgs.to,taskArgs.tokenId);
+        console.log("safeTransferFrom:",txInfo.hash)
     });
 
 function read_csv(csvfile: any){

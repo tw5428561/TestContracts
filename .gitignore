@@ -8,7 +8,7 @@ coverage.json
 cache
 artifacts
 typechain
-typechain-types
+#typechain-types
 
 
 #package
