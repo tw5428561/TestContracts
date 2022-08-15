@@ -25,11 +25,14 @@ task("erc20Test", "erc20 任务测试入口task")
         const secrects =read_csv('./secrect.csv')
         let userAddress=secrects[1][1]
         // @ts-ignore
-        await run("transfer", {token: tokenAddress,to: userAddress, amount: "11111111111111111111"})
+        await run("transferFrom", {token: tokenAddress,from:ownerAddress,to: userAddress, amount: "111111111111111111111"})
         // @ts-ignore
         let balances01 =await run("queryErc20balances", {token: tokenAddress, user: userAddress})
-        expect(balances01).to.equal("11111111111111111111")
-        console.log("--------------------------------erc20-transfer-success--------------------------------")
+        expect(balances01).to.equal("111111111111111111111")
+        // @ts-ignore
+        let allowancesEnd = await run("queryAllowance",{token:tokenAddress, to:ownerAddress,account:ownerAddress})
+        expect(allowancesEnd).to.equal("100000000000000000000")
+        console.log("--------------------------------erc20-transferFrom-allowances-success--------------------------------")
     });
 
 subtask("deployToken", "Deploy Token")
@@ -111,6 +114,17 @@ subtask("getHash","获取交易信息")
         console.log("receiptStatus: ", transactionReceipt.status)
         console.log("cumulativeGasUsed: ", transactionReceipt.cumulativeGasUsed)
         console.log("contractAddress: ", transactionReceipt.contractAddress)
+    });
+
+subtask("transferFrom", "转账")
+    .addParam("token", "token address")
+    .addParam("from", "from address ")
+    .addParam("to", "to address ")
+    .addParam("amount", "approve amount")
+    .setAction(async (taskArgs, hre) => {
+        const tokenFactory = await hre.ethers.getContractFactory('TestERC20')
+        const erc20 = await tokenFactory.attach(taskArgs.token)
+        await erc20.transferFrom(taskArgs.from,taskArgs.to, taskArgs.amount);
     });
 
 function read_csv(csvfile: any){
