@@ -75,7 +75,30 @@ const config: HardhatUserConfig = {
       gasPrice: 5000000,
       //explorer: https://blockscout.com/optimism/goerli/
     },
+    btl2: {
+      url: "http://localhost:8545",
+      accounts: {
+        mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      },
+      // accounts:['0x7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e'],
+      chainId: 31337,
+      gas: 10000000,
+      gasPrice: 5000000,
+    },
+    btl1: {
+      url: "http://localhost:9545",
+      accounts: {
+        mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      },
+      //accounts:['0x7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e'],
+      chainId: 17,
+      gas: 10000000,
+      gasPrice: 5000000,
+    },
   },
+
+  // const l1RpcProvider = new ethers.providers.JsonRpcProvider('http://localhost:9545')
+  // const l2RpcProvider = new ethers.providers.JsonRpcProvider('http://localhost:8545')
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",
